@@ -4,27 +4,27 @@
 #include <string>
 #include <ctime>
 using namespace cv;
-//»Ò¶È¶Ô±È
-//ÇøÓò
+//ç°åº¦å¯¹æ¯”
+//åŒºåŸŸ
 int  xmin=10, ymin=320, xmax=400, ymax=500;
-//Ö¡ÊıÏà¾ÛÏñËØ²î
+//å¸§æ•°ç›¸èšåƒç´ å·®
 int abs_differ=15;
-//²î¾àÏñËØÊıÁ¿Õ¼ÕûÌåÍ¼Æ¬ÊıÁ¿µÄ°Ù·Ö±È
+//å·®è·åƒç´ æ•°é‡å æ•´ä½“å›¾ç‰‡æ•°é‡çš„ç™¾åˆ†æ¯”
 float scale = 0.19;
-//ÔöÒæ
+//å¢ç›Š
 bool gats = true;
 float alpha =1.3;
 float beat = 20;
-//Ğı×ª
+//æ—‹è½¬
 bool rotation = true;
 int angle1 = 20;
 int angle2 = 30;
 #define random(a,b) (rand()%(b-a)+a)
-//ÂË²¨
+//æ»¤æ³¢
 bool blured = true;
 int ksize = 3;
 int type=0;
-//ÊÇ·ñÈÚºÏ
+//æ˜¯å¦èåˆ
 bool blend=true;
 void Gats(Mat &src, float alpha, int beat);
 void rotate_arbitrarily_angle(Mat &src, Mat &dst, int angle1, int angle2);
@@ -36,9 +36,9 @@ int main()
   long currentFrame = 1;
   float p;
   VideoCapture cap;
-  //ÕâÀï·ÅÖÃĞèÒªÌáÈ¡¹Ø¼ü×ÖµÄÊÓÆµ
+  //è¿™é‡Œæ”¾ç½®éœ€è¦æå–å…³é”®å­—çš„è§†é¢‘
   cap.open("1.mp4");
-  if (!cap.isOpened())//Èç¹ûÊÓÆµ²»ÄÜÕı³£´ò¿ªÔò·µ»Ø
+  if (!cap.isOpened())//å¦‚æœè§†é¢‘ä¸èƒ½æ­£å¸¸æ‰“å¼€åˆ™è¿”å›
   {
     cout << "cannot open video!" << endl;
     return 0 ;
@@ -70,51 +70,51 @@ int main()
     }*/
     srcImage_base = frame_key(Rect(xmin, ymin, xmax, ymax));
     srcImage_test1 = frame(Rect(xmin, ymin, xmax, ymax));
-    //½«Í¼Ïñ´ÓBGRÉ«²Ê¿Õ¼ä×ª»»µ½ HSVÉ«²Ê¿Õ¼ä
+    //å°†å›¾åƒä»BGRè‰²å½©ç©ºé—´è½¬æ¢åˆ° HSVè‰²å½©ç©ºé—´
     cvtColor(srcImage_base, previousImage, CV_BGR2GRAY);
     cvtColor(srcImage_test1, currentImage, CV_BGR2GRAY);
     //printf(">>>>>>>>>>>>>2");
-    absdiff(currentImage, previousImage, resultImage);  //Ö¡²î·¨£¬Ïà¼õ
+    absdiff(currentImage, previousImage, resultImage);  //å¸§å·®æ³•ï¼Œç›¸å‡
     //printf(">>>>>>>>>>>>>3");
-    threshold(resultImage, resultImage, abs_differ, 255.0, CV_THRESH_BINARY); //¶şÖµ»¯£¬ÏñËØÖµÏà²î´óÓÚ20ÔòÖÃÎª255£¬ÆäÓàÎª0
+    threshold(resultImage, resultImage, abs_differ, 255.0, CV_THRESH_BINARY); //äºŒå€¼åŒ–ï¼Œåƒç´ å€¼ç›¸å·®å¤§äº20åˆ™ç½®ä¸º255ï¼Œå…¶ä½™ä¸º0
     printf(">>>>>>>>>>>>>1\n");
     float counter = 0;
     float num = 0;
-    // Í³¼ÆÁ½Ö¡Ïà¼õºóÍ¼ÏñËØ
+    // ç»Ÿè®¡ä¸¤å¸§ç›¸å‡åå›¾åƒç´ 
     for (int i = 0; i < resultImage.rows; i++)
     {
-      uchar *data = resultImage.ptr<uchar>(i); //»ñÈ¡Ã¿Ò»ĞĞµÄÖ¸Õë
+      uchar *data = resultImage.ptr<uchar>(i); //è·å–æ¯ä¸€è¡Œçš„æŒ‡é’ˆ
       for (int j = 0; j < resultImage.cols; j++)
       {
         num = num + 1;
-        if (data [j] == 255) //·ÃÎÊµ½ÏñËØÖµ
+        if (data [j] == 255) //è®¿é—®åˆ°åƒç´ å€¼
         {
           counter = counter + 1;
         }
       }
     }
     p = counter / num;
-    // counter  num  p ·Ö±ğÎª  ÓĞ±ä»¯µÄÏñËØµãÊı  ×ÜÏñËØµãÊıÄ¿  ±ÈÀı
+    // counter  num  p åˆ†åˆ«ä¸º  æœ‰å˜åŒ–çš„åƒç´ ç‚¹æ•°  æ€»åƒç´ ç‚¹æ•°ç›®  æ¯”ä¾‹
     printf(">>>>>>counter>>>>num>>>>p: %f  %f  %f  \n", counter, num, p);
     //float t = 1.05-float(thread) / float(100);
-    if (p > scale) //´ïµ½ãĞÖµµÄÏñËØÊı´ïµ½Ò»¶¨µÄÊıÁ¿Ôò±£´æ¸ÃÍ¼Ïñ
+    if (p > scale) //è¾¾åˆ°é˜ˆå€¼çš„åƒç´ æ•°è¾¾åˆ°ä¸€å®šçš„æ•°é‡åˆ™ä¿å­˜è¯¥å›¾åƒ
     {
       //printf(">>>>>>>>>>>>>6");
       cout << ">>>>>>>>>>>>>>>>>>>>.>>>>>>>.this frame is keyframe!" << endl;
      // frame.convertTo(frame, frame.type(), alpha, beat);
       frame_key = frame;
-      cout << "ÕıÔÚĞ´µÚ" << currentFrame << "Ö¡" << endl;
+      cout << "æ­£åœ¨å†™ç¬¬" << currentFrame << "å¸§" << endl;
       stringstream str;
       stringstream str2;
       stringstream str3;
       stringstream str4;
-      //Ğ´ÊÓÆµ±£´æÄ¿Â¼,ÎÒµÄÊÇ  ./keyframes_pixels_cha/xx.jpg  xxÎªµ±Ç°Ö¡µÄĞòºÅ
+      //å†™è§†é¢‘ä¿å­˜ç›®å½•,æˆ‘çš„æ˜¯  ./keyframes_pixels_cha/xx.jpg  xxä¸ºå½“å‰å¸§çš„åºå·
       //str << "./keyframes_pixels_cha/" << currentFrame << ".jpg";
-      str << "F:/×ÀÃæ/Î¢Æó/key/key_" << currentFrame << ".jpg";
+      str << "F:/æ¡Œé¢/key/key_" << currentFrame << ".jpg";
       cout << str.str() << endl;
       Mat src = frame_key(Rect(xmin, ymin, xmax, ymax));
       Mat des;
-      //ÊÇ·ñĞı×ª
+      //æ˜¯å¦æ—‹è½¬
       if (rotation)
       {
         if (blend)
@@ -123,11 +123,11 @@ int main()
         }
         else
         {
-          str2 << "F:/×ÀÃæ/Î¢Æó/key/rotation/key_rotation_" << currentFrame << ".jpg";
+          str2 << "F:/æ¡Œé¢/key/rotation/key_rotation_" << currentFrame << ".jpg";
           imwrite(str2.str(), des);
         }
       }
-      //ÊÇ·ñÂË²¨Ä£ºı
+      //æ˜¯å¦æ»¤æ³¢æ¨¡ç³Š
       if (blured)
       {
         if (blend)
@@ -137,11 +137,11 @@ int main()
         else
         {
           image_blur(src, des, ksize, type);
-          str3 << "F:/×ÀÃæ/Î¢Æó/key/blur/key_blur_" << currentFrame << ".jpg";
+          str3 << "F:/æ¡Œé¢/key/blur/key_blur_" << currentFrame << ".jpg";
           imwrite(str3.str(), des);
         }
       }
-      //ÊÇ·ñÔöÒæ
+      //æ˜¯å¦å¢ç›Š
       if (gats)
       {
         if (blend)
@@ -151,14 +151,14 @@ int main()
         else
         {
           Gats(src, alpha, beat);
-          str4 << "F:/×ÀÃæ/Î¢Æó/key/gats/key_gats_" << currentFrame << ".jpg";
+          str4 << "F:/æ¡Œé¢/key/gats/key_gats_" << currentFrame << ".jpg";
           imwrite(str4.str(), src);
         }
       }
       if (blend)
       {
         str2.clear();
-        str2 << "F:/×ÀÃæ/Î¢Æó/key/blend/key_blend_" << currentFrame << ".jpg";
+        str2 << "F:/æ¡Œé¢/key/blend/key_blend_" << currentFrame << ".jpg";
         imwrite(str2.str(), des);
       }
       else
@@ -181,7 +181,7 @@ void Gats(Mat &src,float alpha,int beat) {
 
 void rotate_arbitrarily_angle(Mat &src, Mat &dst,  int angle1, int angle2)
 {
-  srand((int)time(0));  // ²úÉúËæ»úÖÖ×Ó  °Ñ0»»³ÉNULLÒ²ĞĞ
+  srand((int)time(0));  // äº§ç”Ÿéšæœºç§å­  æŠŠ0æ¢æˆNULLä¹Ÿè¡Œ
   float angle;
   if (angle2<angle1)
   {
@@ -197,24 +197,24 @@ void rotate_arbitrarily_angle(Mat &src, Mat &dst,  int angle1, int angle2)
  
   float radian = (float)(angle / 180.0 * CV_PI);
 
-  //Ìî³äÍ¼Ïñ
-  int maxBorder = (int)(max(src.cols, src.rows)* 1.414); //¼´Îªsqrt(2)*max
+  //å¡«å……å›¾åƒ
+  int maxBorder = (int)(max(src.cols, src.rows)* 1.414); //å³ä¸ºsqrt(2)*max
   int dx = (maxBorder - src.cols) / 2;
   int dy = (maxBorder - src.rows) / 2;
   copyMakeBorder(src, dst, dy, dy, dx, dx, BORDER_CONSTANT);
 
-  //Ğı×ª
+  //æ—‹è½¬
   Point2f center((float)(dst.cols / 2), (float)(dst.rows / 2));
-  Mat affine_matrix = getRotationMatrix2D(center, angle, 1.0);//ÇóµÃĞı×ª¾ØÕó
+  Mat affine_matrix = getRotationMatrix2D(center, angle, 1.0);//æ±‚å¾—æ—‹è½¬çŸ©é˜µ
   warpAffine(dst, dst, affine_matrix, dst.size());
 
-  //¼ÆËãÍ¼ÏñĞı×ªÖ®ºó°üº¬Í¼ÏñµÄ×î´óµÄ¾ØĞÎ
+  //è®¡ç®—å›¾åƒæ—‹è½¬ä¹‹ååŒ…å«å›¾åƒçš„æœ€å¤§çš„çŸ©å½¢
   float sinVal = abs(sin(radian));
   float cosVal = abs(cos(radian));
   Size targetSize((int)(src.cols * cosVal + src.rows * sinVal),
     (int)(src.cols * sinVal + src.rows * cosVal));
 
-  //¼ôµô¶àÓà±ß¿ò
+  //å‰ªæ‰å¤šä½™è¾¹æ¡†
   int x = (dst.cols - targetSize.width) / 2;
   int y = (dst.rows - targetSize.height) / 2;
   Rect rect(x, y, targetSize.width, targetSize.height);
